@@ -1,29 +1,32 @@
 pipeline {
     agent any
-    
+
     stages {
-        stage('Checkout') {
+        stage('Environment Check') {
             steps {
-                echo 'Checking out code from the repository...'
+                sh 'java -version'
+                sh 'git --version'
             }
         }
         stage('Build') {
             steps {
-                echo 'Compiling the application...'
-                sh 'mkdir -p build && touch build/app.exe'
+                echo 'Simulating a build...'
+                sh 'touch my-app.build'
             }
         }
         stage('Test') {
             steps {
-                echo 'Running automated test...'
-                sh 'echo "Test Passed!"'
+                echo 'Running a mock health check...'
+                sh 'ls -l my-app.build'
             }
         }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying to the "Production" folder...'
-                sh 'cp build/app.exe /tmp/deployed_app.exe'
-            }
+    }
+    post {
+        always {
+            echo 'I will always run, regardless of success or failure!'
+        }
+        success {
+            echo 'The build was successful!'
         }
     }
 }
